@@ -1,6 +1,9 @@
 package com.vehiculos.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +11,8 @@ import javax.persistence.Id;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Car {
     @Id
     private Long id;
@@ -19,4 +24,5 @@ public class Car {
     private String vin;
     private Double price;
     private Boolean availability;
+
 }
