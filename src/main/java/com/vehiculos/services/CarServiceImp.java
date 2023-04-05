@@ -19,7 +19,7 @@ public class CarServiceImp implements CarService{
     private final CarRepository carRepository;
     @Override
     public Car getCar(Long id) {
-        return null;
+        return carRepository.findById(id).get();
     }
 
     @Override
@@ -42,11 +42,26 @@ public class CarServiceImp implements CarService{
 
     @Override
     public List<Car> allCar() {
-        return null;
+        return carRepository.findAll();
     }
 
     @Override
     public Boolean updateCar(Long id, Car car) {
-        return null;
+        try {
+            Car carDB = carRepository.findById(id).get();
+            carDB.setBrand(car.getBrand());
+            carDB.setModel(car.getModel());
+            carDB.setColor(carDB.getColor());
+            carDB.setModelYear(car.getModelYear());
+            carDB.setVin(car.getVin());
+            carDB.setPrice(car.getPrice());
+            carDB.setAvailability(car.getAvailability());
+            carRepository.save(carDB);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
+
+
 }
