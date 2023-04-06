@@ -2,6 +2,8 @@ package com.vehiculos.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vehiculos.exception.AlreadyExistsException;
+import com.vehiculos.exception.CarNotFoundException;
+import com.vehiculos.exception.CarUpdateException;
 import com.vehiculos.models.Car;
 import com.vehiculos.repository.CarRepository;
 import com.vehiculos.resttemplate.CarRestTemplate;
@@ -14,19 +16,24 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CarServiceImp implements CarService{
+public class CarServiceImp implements CarService {
     private final CarRestTemplate carRestTemplate;
     private final CarRepository carRepository;
+
     @Override
     public Car getCar(Long id) {
-        return carRepository.findById(id).get();
+        Optional<Car> car = carRepository.findById(id);
+        if (car.isEmpty()) {
+            throw new CarNotFoundException(String.format("El carro con id %d No se encuentra registrado", id));
+        }
+        return car.get();
     }
 
     @Override
-    public void createCar(Long id){
+    public void createCar(Long id) {
         Optional<Car> car = carRepository.findById(id);
-        if(car.isPresent()){
-            throw new AlreadyExistsException(String.format("El vehículo con id %d ya existe ", id ));
+        if (car.isPresent()) {
+            throw new AlreadyExistsException(String.format("El vehículo con id %d ya existe ", id));
         }
         try {
             CarRestTemplateModel carRestTemplateModel = carRestTemplate.getCarApiPublic(id);
@@ -46,22 +53,27 @@ public class CarServiceImp implements CarService{
     }
 
     @Override
-    public Boolean updateCar(Long id, Car car) {
-        try {
-            Car carDB = carRepository.findById(id).get();
-            carDB.setBrand(car.getBrand());
-            carDB.setModel(car.getModel());
-            carDB.setColor(carDB.getColor());
-            carDB.setModelYear(car.getModelYear());
-            carDB.setVin(car.getVin());
-            carDB.setPrice(car.getPrice());
-            carDB.setAvailability(car.getAvailability());
-            carRepository.save(carDB);
-            return true;
-        }catch (Exception e){
-            return false;
+    public void updateCar(Long id, Car car) {
+
+        Optional<Car> carDBOptional = carRepository.findById(id);
+        if (carDBOptional.isEmpty()) {
+            throw new CarNotFoundException(String.format("El carro con id %d No se encuentra registrado", id));
         }
+        Car carDB = carDBOptional.get();
+        carDB.setBrand(car.getBrand());
+        carDB.setModel(car.getModel());
+        carDB.setColor(carDB.getColor());
+        carDB.setModelYear(car.getModelYear());
+        carDB.setVin(car.getVin());
+        carDB.setPrice(car.getPrice());
+        carDB.setAvailability(car.getAvailability());
+        if(carRepository.save(carDB) == null){
+            throw new CarUpdateException("Error al actualizar el vehiculo con id "+id);
+        }
+
     }
+
+
 
 
 }
