@@ -3,7 +3,6 @@ package com.vehiculos.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

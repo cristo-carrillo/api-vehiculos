@@ -10,5 +10,5 @@ public interface CarService {
     Car getCar(Long id);
     void createCar(Long id) throws JsonProcessingException;
     List<Car> allCar();
-    Boolean updateCar(Long id, Car car);
+    void updateCar(Long id, Car car);
 }
