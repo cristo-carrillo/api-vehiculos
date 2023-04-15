@@ -1,5 +1,6 @@
 package com.vehiculos.controllers;
 
+import com.vehiculos.dto.CarRequestDto;
 import com.vehiculos.exception.AlreadyExistsException;
 import com.vehiculos.exception.CarNotFoundException;
 import com.vehiculos.models.Car;
@@ -20,7 +21,7 @@ public class CarController {
     @Autowired
     private final CarServiceImp carServiceImp;
     @PostMapping("")
-    public ResponseEntity saveUser(@RequestBody Car car) {
+    public ResponseEntity saveUser(@RequestBody CarRequestDto car) {
 
         Map<String, String> response = new HashMap<>();
         try{
