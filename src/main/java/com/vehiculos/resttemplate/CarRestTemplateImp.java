@@ -13,9 +13,8 @@ public class CarRestTemplateImp implements CarRestTemplate{
 
     private final RestTemplate restTemplate;
     @Override
-    public CarRestTemplateModel getCarApiPublic(Long id) throws JsonProcessingException {
-        ResponseEntity<String> response = restTemplate.getForEntity(baseUrl.concat(String.valueOf(id)), String.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(response.getBody().substring(7), CarRestTemplateModel.class);
+    public CarConsumerApiModel getCarApiPublic(Long id) throws JsonProcessingException {
+        ResponseEntity<CarConverter> response = restTemplate.getForEntity(baseUrl.concat(String.valueOf(id)), CarConverter.class);
+        return response.getBody().getCar();
     }
 }
