@@ -7,7 +7,7 @@ import com.vehiculos.exception.CarUpdateException;
 import com.vehiculos.models.Car;
 import com.vehiculos.repository.CarRepository;
 import com.vehiculos.resttemplate.CarRestTemplate;
-import com.vehiculos.resttemplate.CarRestTemplateModel;
+import com.vehiculos.resttemplate.CarConsumerApiModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,10 +36,10 @@ public class CarServiceImp implements CarService {
             throw new AlreadyExistsException(String.format("El vehículo con id %d ya existe ", id));
         }
         try {
-            CarRestTemplateModel carRestTemplateModel = carRestTemplate.getCarApiPublic(id);
-            Car newCar = new Car(carRestTemplateModel.getId(), carRestTemplateModel.getCar(), carRestTemplateModel.getCar_model(),
-                    carRestTemplateModel.getCar_color(), carRestTemplateModel.getCar_model_year(), carRestTemplateModel.getCar_vin(),
-                    Double.parseDouble(carRestTemplateModel.getPrice().substring(1)), carRestTemplateModel.isAvailability());
+            CarConsumerApiModel carConsumerApiModel = carRestTemplate.getCarApiPublic(id);
+            Car newCar = new Car(carConsumerApiModel.getId(), carConsumerApiModel.getCar(), carConsumerApiModel.getCarModel(),
+                    carConsumerApiModel.getCarColor(), carConsumerApiModel.getCarModelYear(), carConsumerApiModel.getCarVin(),
+                    Double.parseDouble(carConsumerApiModel.getPrice().substring(1)), carConsumerApiModel.isAvailability());
 
             carRepository.save(newCar);
         } catch (JsonProcessingException e) {
