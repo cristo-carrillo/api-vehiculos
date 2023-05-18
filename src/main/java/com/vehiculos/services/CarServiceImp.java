@@ -1,11 +1,14 @@
 package com.vehiculos.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.vehiculos.dto.CarRequestDto;
 import com.vehiculos.exception.AlreadyExistsException;
 import com.vehiculos.exception.CarNotFoundException;
 import com.vehiculos.exception.CarUpdateException;
 import com.vehiculos.models.Car;
+import com.vehiculos.models.User;
 import com.vehiculos.repository.CarRepository;
+import com.vehiculos.repository.UserRepository;
 import com.vehiculos.resttemplate.CarRestTemplate;
 import com.vehiculos.resttemplate.CarConsumerApiModel;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +17,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.vehiculos.utils.Constants.USER_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class CarServiceImp implements CarService {
     private final CarRestTemplate carRestTemplate;
     private final CarRepository carRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Car getCar(Long id) {
@@ -30,16 +36,20 @@ public class CarServiceImp implements CarService {
     }
 
     @Override
-    public void createCar(Long id) {
-        Optional<Car> car = carRepository.findById(id);
+    public void createCar(CarRequestDto carRequestDto) {
+        Optional<Car> car = carRepository.findById(carRequestDto.getId());
         if (car.isPresent()) {
-            throw new AlreadyExistsException(String.format("El vehículo con id %d ya existe ", id));
+            throw new AlreadyExistsException(String.format("El vehículo con id %d ya existe ", carRequestDto.getId()));
+        }
+        Optional<User> user = userRepository.findByEmail(carRequestDto.getEmailUser());
+        if(user.isEmpty()){
+            throw new RuntimeException(USER_NOT_FOUND);
         }
         try {
-            CarConsumerApiModel carConsumerApiModel = carRestTemplate.getCarApiPublic(id);
+            CarConsumerApiModel carConsumerApiModel = carRestTemplate.getCarApiPublic(carRequestDto.getId());
             Car newCar = new Car(carConsumerApiModel.getId(), carConsumerApiModel.getCar(), carConsumerApiModel.getCarModel(),
                     carConsumerApiModel.getCarColor(), carConsumerApiModel.getCarModelYear(), carConsumerApiModel.getCarVin(),
-                    Double.parseDouble(carConsumerApiModel.getPrice().substring(1)), carConsumerApiModel.isAvailability());
+                    Double.parseDouble(carConsumerApiModel.getPrice().substring(1)), carConsumerApiModel.isAvailability(), user.orElseThrow());
 
             carRepository.save(newCar);
         } catch (JsonProcessingException e) {
