@@ -3,10 +3,9 @@ package com.vehiculos.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.mapping.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -23,5 +22,9 @@ public class Car {
     private String vin;
     private Double price;
     private Boolean availability;
+    @ManyToOne
+    @JoinColumn(name = "id", nullable = false)
+    private User user;
+
 
 }
