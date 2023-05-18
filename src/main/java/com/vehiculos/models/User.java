@@ -1,11 +1,12 @@
 package com.vehiculos.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Entity
@@ -28,6 +29,7 @@ public class User {
     private Date birthday;
 
     @OneToMany(mappedBy = "user")
-    private Set<Car> cars;
+    @JsonIgnore
+    private List<Car> cars;
 
 }

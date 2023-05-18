@@ -1,5 +1,6 @@
 package com.vehiculos.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Car {
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
     private User user;
+
 
 
 }

@@ -49,7 +49,8 @@ public class CarServiceImp implements CarService {
             CarConsumerApiModel carConsumerApiModel = carRestTemplate.getCarApiPublic(carRequestDto.getId());
             Car newCar = new Car(carConsumerApiModel.getId(), carConsumerApiModel.getCar(), carConsumerApiModel.getCarModel(),
                     carConsumerApiModel.getCarColor(), carConsumerApiModel.getCarModelYear(), carConsumerApiModel.getCarVin(),
-                    Double.parseDouble(carConsumerApiModel.getPrice().substring(1)), carConsumerApiModel.isAvailability(), user.orElseThrow());
+                    Double.parseDouble(carConsumerApiModel.getPrice().substring(1)), carConsumerApiModel.isAvailability(),
+                    user.orElseThrow());
 
             carRepository.save(newCar);
         } catch (JsonProcessingException e) {
