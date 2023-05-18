@@ -25,7 +25,7 @@ public class CarController {
 
         Map<String, String> response = new HashMap<>();
         try{
-            carServiceImp.createCar(car.getId());
+            carServiceImp.createCar(car);
             response.put("status", "201");
             response.put("message", "Vehiculo creado con éxito");
             return new ResponseEntity<>(response, HttpStatus.CREATED);

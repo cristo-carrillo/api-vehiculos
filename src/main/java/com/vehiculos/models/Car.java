@@ -3,7 +3,6 @@ package com.vehiculos.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.mapping.Set;
 
 import javax.persistence.*;
 
@@ -23,7 +22,7 @@ public class Car {
     private Double price;
     private Boolean availability;
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "id_user", nullable = false)
     private User user;
 
 
