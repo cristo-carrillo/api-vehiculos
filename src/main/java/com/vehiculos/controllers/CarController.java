@@ -4,14 +4,17 @@ import com.vehiculos.dto.CarRequestDto;
 import com.vehiculos.dto.CarUserResponseDto;
 import com.vehiculos.exception.AlreadyExistsException;
 import com.vehiculos.exception.CarNotFoundException;
+import com.vehiculos.exception.TokenIsNotValidException;
 import com.vehiculos.models.Car;
 import com.vehiculos.services.CarServiceImp;
+import com.vehiculos.utils.ValidateToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,15 +29,25 @@ public class CarController {
     @Autowired
     private final CarServiceImp carServiceImp;
 
-    @PostMapping("")
-    public ResponseEntity<Map<String,String>> saveCar(@RequestBody CarRequestDto car) {
+    @Autowired
+    private final ValidateToken validateToken;
 
+
+    @PostMapping("")
+    public ResponseEntity<Map<String,String>> saveCar(HttpServletRequest request, @RequestBody CarRequestDto car) {
+
+        String jwt= request.getHeader("Authorization").substring(7);
         Map<String, String> response = new HashMap<>();
         try {
+            validateToken.isValid(jwt);
             carServiceImp.createCar(car);
             response.put(STATUS, "201");
             response.put(MESSAGE, "Vehiculo creado con éxito");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
+        } catch (TokenIsNotValidException e){
+            response.put(STATUS, "403");
+            response.put(MESSAGE, e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
         } catch (AlreadyExistsException e) {
             response.put(STATUS, "409");
             response.put(MESSAGE, e.getMessage());
@@ -48,19 +61,35 @@ public class CarController {
             response.put(MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_IMPLEMENTED);
         }
+
     }
 
     @GetMapping
-    public ResponseEntity<List<CarUserResponseDto>> getAllCar() {
-        return ResponseEntity.ok(carServiceImp.allCar());
+    public ResponseEntity getAllCar(HttpServletRequest request) {
+        String jwt= request.getHeader("Authorization").substring(7);
+        Map<String, String> response = new HashMap<>();
+        try {
+            validateToken.isValid(jwt);
+            return ResponseEntity.ok(carServiceImp.allCar());
+        } catch (TokenIsNotValidException e){
+            response.put(STATUS, "403");
+            response.put(MESSAGE, e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findCarById(@PathVariable Long id) {
+    public ResponseEntity findCarById(HttpServletRequest request,@PathVariable Long id) {
+        String jwt= request.getHeader("Authorization").substring(7);
         Map<String, String> response = new HashMap<>();
         try {
+            validateToken.isValid(jwt);
             return ResponseEntity.ok(carServiceImp.getCar(id));
 
+        } catch (TokenIsNotValidException e){
+            response.put(STATUS, "403");
+            response.put(MESSAGE, e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
         } catch (CarNotFoundException e) {
             response.put(STATUS, "404");
             response.put(MESSAGE, e.getMessage());
@@ -73,13 +102,19 @@ public class CarController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateCar(@PathVariable Long id, @RequestBody Car car) {
+    public ResponseEntity updateCar(HttpServletRequest request,@PathVariable Long id, @RequestBody Car car) {
+        String jwt= request.getHeader("Authorization").substring(7);
         Map<String, String> response = new HashMap<>();
         try {
+            validateToken.isValid(jwt);
             carServiceImp.updateCar(id, car);
             response.put(STATUS, "200");
             response.put(MESSAGE, "Vehiculo actualizado con éxito");
             return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (TokenIsNotValidException e){
+            response.put(STATUS, "403");
+            response.put(MESSAGE, e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
         } catch (CarNotFoundException e) {
             response.put(STATUS, "404");
             response.put(MESSAGE, e.getMessage());
