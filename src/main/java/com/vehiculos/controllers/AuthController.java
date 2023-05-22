@@ -1,5 +1,6 @@
 package com.vehiculos.controllers;
 
+import com.vehiculos.dto.UserAuthDto;
 import com.vehiculos.models.User;
 import com.vehiculos.services.UserService;
 import com.vehiculos.utils.ApiResponse;
@@ -22,11 +23,11 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    private ApiResponse apiResponse;
-    Map data = new HashMap<>();
+    Map<String, String> data = new HashMap<>();
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody User user) {
+    public ResponseEntity<ApiResponse> login(@RequestBody UserAuthDto user) {
+        ApiResponse apiResponse;
         try {
             data.put("Token", userService.login(user));
             apiResponse = new ApiResponse(USER_LOGIN, data);

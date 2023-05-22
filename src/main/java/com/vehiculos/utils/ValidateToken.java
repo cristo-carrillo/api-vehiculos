@@ -1,9 +1,7 @@
 package com.vehiculos.utils;
 
-import org.springframework.http.ResponseEntity;
-
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 
 public interface ValidateToken {
-    void isValid(String jwt);
+    void isValid(HttpServletRequest request);
 }

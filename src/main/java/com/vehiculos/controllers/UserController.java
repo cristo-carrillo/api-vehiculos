@@ -23,7 +23,7 @@ public class UserController {
     private ApiResponse apiResponse;
 
     @GetMapping("/{id}")
-    public ResponseEntity findUserById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse> findUserById(@PathVariable Long id) {
         try {
             apiResponse = new ApiResponse(REGISTER_FOUND, userService.getUser(id));
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
@@ -34,17 +34,19 @@ public class UserController {
     }
 
     @PostMapping("")
-    public ResponseEntity saveUser(@RequestBody User user) {
-        if (!userService.createUser(user)) {
+    public ResponseEntity<ApiResponse> saveUser(@RequestBody User user) {
+        try {
+            userService.createUser(user);
+            apiResponse = new ApiResponse(REGISTER_CREATED, "");
+            return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+        } catch (Exception e) {
             apiResponse = new ApiResponse(REGISTER_BAD, "");
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
         }
-        apiResponse = new ApiResponse(REGISTER_CREATED, "");
-        return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
     @GetMapping("")
-    public ResponseEntity getAllUser() {
+    public ResponseEntity<ApiResponse> getAllUser() {
         List<UserCarResponseDto> registeredUsers = userService.allUser();
         if (registeredUsers.isEmpty()) {
             apiResponse = new ApiResponse(REGISTER_EMPTY, "");
@@ -55,13 +57,16 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateUser(@PathVariable Long id, @RequestBody User user) {
-        if (!userService.updateUser(id, user)) {
+    public ResponseEntity<ApiResponse> updateUser(@PathVariable Long id, @RequestBody User user) {
+
+        try {
+            userService.updateUser(id, user);
+            apiResponse = new ApiResponse(REGISTER_UPDATED, "");
+            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        } catch (Exception e) {
             apiResponse = new ApiResponse(REGISTER_DATA_ERROR, "");
             return new ResponseEntity<>(apiResponse, HttpStatus.PAYMENT_REQUIRED);
         }
-        apiResponse = new ApiResponse(REGISTER_UPDATED, "");
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
 
