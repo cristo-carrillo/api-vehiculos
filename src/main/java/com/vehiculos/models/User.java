@@ -1,7 +1,6 @@
 package com.vehiculos.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -29,7 +28,6 @@ public class User {
     private Date birthday;
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnore
     private List<Car> cars;
 
 }

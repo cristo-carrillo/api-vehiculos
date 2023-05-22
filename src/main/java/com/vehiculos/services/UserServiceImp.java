@@ -1,8 +1,10 @@
 package com.vehiculos.services;
 
+import com.vehiculos.dto.UserCarResponseDto;
 import com.vehiculos.models.User;
 import com.vehiculos.repository.UserRepository;
 import com.vehiculos.utils.JWTUtil;
+import com.vehiculos.mapper.UserToUserCarResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,13 @@ public class UserServiceImp implements UserService {
     private final JWTUtil jwtUtil;
 
     @Override
-    public User getUser(Long id) {
-        return userRepository.findById(id).get();
+    public UserCarResponseDto getUser(Long id) {
+        Optional<User> userFind = userRepository.findById(id);
+        if(userFind.isEmpty()){
+            throw new RuntimeException(USER_NOT_FOUND);
+        }
+
+        return UserToUserCarResponseDto.userCarToUserDto(userFind.get());
     }
 
     @Override
@@ -39,8 +46,11 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public List<User> allUser() {
-        return userRepository.findAll();
+    public List<UserCarResponseDto> allUser() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserToUserCarResponseDto::userCarToUserDto)
+                .toList();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.vehiculos.controllers;
 
+import com.vehiculos.dto.UserCarResponseDto;
 import com.vehiculos.models.User;
 import com.vehiculos.services.UserService;
 import com.vehiculos.utils.ApiResponse;
@@ -44,7 +45,7 @@ public class UserController {
 
     @GetMapping("")
     public ResponseEntity getAllUser() {
-        List<User> registeredUsers = userService.allUser();
+        List<UserCarResponseDto> registeredUsers = userService.allUser();
         if (registeredUsers.isEmpty()) {
             apiResponse = new ApiResponse(REGISTER_EMPTY, "");
             return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
