@@ -2,14 +2,15 @@ package com.vehiculos.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vehiculos.dto.CarRequestDto;
+import com.vehiculos.dto.CarUserResponseDto;
 import com.vehiculos.models.Car;
 
 import java.util.List;
 
 public interface CarService {
 
-    Car getCar(Long id);
+    CarUserResponseDto getCar(Long id);
     void createCar(CarRequestDto id) throws JsonProcessingException;
-    List<Car> allCar();
+    List<CarUserResponseDto> allCar();
     void updateCar(Long id, Car car);
 }

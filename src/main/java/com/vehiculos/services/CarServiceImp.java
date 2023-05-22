@@ -2,6 +2,7 @@ package com.vehiculos.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vehiculos.dto.CarRequestDto;
+import com.vehiculos.dto.CarUserResponseDto;
 import com.vehiculos.exception.AlreadyExistsException;
 import com.vehiculos.exception.CarNotFoundException;
 import com.vehiculos.exception.CarUpdateException;
@@ -11,11 +12,13 @@ import com.vehiculos.repository.CarRepository;
 import com.vehiculos.repository.UserRepository;
 import com.vehiculos.resttemplate.CarRestTemplate;
 import com.vehiculos.resttemplate.CarConsumerApiModel;
+import com.vehiculos.mapper.CarToCarUserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.vehiculos.utils.Constants.USER_NOT_FOUND;
 
@@ -27,12 +30,12 @@ public class CarServiceImp implements CarService {
     private final UserRepository userRepository;
 
     @Override
-    public Car getCar(Long id) {
+    public CarUserResponseDto getCar(Long id) {
         Optional<Car> car = carRepository.findById(id);
         if (car.isEmpty()) {
             throw new CarNotFoundException(String.format("El carro con id %d No se encuentra registrado", id));
         }
-        return car.get();
+        return CarToCarUserResponseDto.carUserToCarDto(car.get());
     }
 
     @Override
@@ -59,8 +62,12 @@ public class CarServiceImp implements CarService {
     }
 
     @Override
-    public List<Car> allCar() {
-        return carRepository.findAll();
+    public List<CarUserResponseDto> allCar() {
+
+        return carRepository.findAll()
+                .stream()
+                .map(CarToCarUserResponseDto::carUserToCarDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -83,6 +90,8 @@ public class CarServiceImp implements CarService {
         }
 
     }
+
+
 
 
 
