@@ -6,19 +6,19 @@ import com.vehiculos.dto.CarUserResponseDto;
 import com.vehiculos.exception.AlreadyExistsException;
 import com.vehiculos.exception.CarNotFoundException;
 import com.vehiculos.exception.CarUpdateException;
+import com.vehiculos.exception.UserNotFoundException;
+import com.vehiculos.mapper.CarToCarUserResponseDto;
 import com.vehiculos.models.Car;
 import com.vehiculos.models.User;
 import com.vehiculos.repository.CarRepository;
 import com.vehiculos.repository.UserRepository;
-import com.vehiculos.resttemplate.CarRestTemplate;
 import com.vehiculos.resttemplate.CarConsumerApiModel;
-import com.vehiculos.mapper.CarToCarUserResponseDto;
+import com.vehiculos.resttemplate.CarRestTemplate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.vehiculos.utils.Constants.USER_NOT_FOUND;
 
@@ -46,7 +46,7 @@ public class CarServiceImp implements CarService {
         }
         Optional<User> user = userRepository.findByEmail(carRequestDto.getEmailUser());
         if(user.isEmpty()){
-            throw new RuntimeException(USER_NOT_FOUND);
+            throw new UserNotFoundException(USER_NOT_FOUND);
         }
         try {
             CarConsumerApiModel carConsumerApiModel = carRestTemplate.getCarApiPublic(carRequestDto.getId());
@@ -67,7 +67,7 @@ public class CarServiceImp implements CarService {
         return carRepository.findAll()
                 .stream()
                 .map(CarToCarUserResponseDto::carUserToCarDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
