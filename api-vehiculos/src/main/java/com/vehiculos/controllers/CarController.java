@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import static com.vehiculos.utils.Constants.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/car")
 @RequiredArgsConstructor

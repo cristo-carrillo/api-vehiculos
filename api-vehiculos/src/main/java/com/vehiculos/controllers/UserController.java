@@ -14,6 +14,7 @@ import java.util.List;
 
 import static com.vehiculos.utils.Constants.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
