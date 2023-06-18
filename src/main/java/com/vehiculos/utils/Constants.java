@@ -18,5 +18,9 @@ public class Constants {
     public static final String TOKEN_IS_EMPTY = "No ingreso el token";
     public static final String TOKEN_IS_INVALID = "El token es invalido";
     public static final String API_EMPTY = "No se puede agregar el vehiculo";
+    public static final String REGISTER_EXIST = "El registro ya existe";
+    public static final String ERROR_SERVER = "Error interno del servidor";
+    public static final String REGISTER_UPDATE_ERROR = "Error al actualizar el registro";
+
 
 }
