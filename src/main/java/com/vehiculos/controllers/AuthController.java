@@ -1,7 +1,6 @@
 package com.vehiculos.controllers;
 
 import com.vehiculos.dto.UserAuthDto;
-import com.vehiculos.models.User;
 import com.vehiculos.services.UserService;
 import com.vehiculos.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +24,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody UserAuthDto user) {
-        ApiResponse apiResponse;
-        try {
-            data.put("Token", userService.login(user));
-            apiResponse = new ApiResponse(USER_LOGIN, data);
-            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
-        } catch (Exception e) {
-            apiResponse = new ApiResponse(e.getMessage(),"");
-            return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
-        }
+        data.put("Token", userService.login(user));
+        ApiResponse apiResponse = new ApiResponse(USER_LOGIN, data);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+
     }
 }
