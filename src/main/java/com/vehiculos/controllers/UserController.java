@@ -25,25 +25,19 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> findUserById(@PathVariable Long id) {
-        try {
-            apiResponse = new ApiResponse(REGISTER_FOUND, userService.getUser(id));
-            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
-        } catch (Exception e) {
-            apiResponse = new ApiResponse(REGISTER_NOT_FOUND, "");
-            return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
-        }
+
+        apiResponse = new ApiResponse(REGISTER_FOUND, userService.getUser(id));
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+
     }
 
     @PostMapping("")
     public ResponseEntity<ApiResponse> saveUser(@RequestBody User user) {
-        try {
-            userService.createUser(user);
-            apiResponse = new ApiResponse(REGISTER_CREATED, "");
-            return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
-        } catch (Exception e) {
-            apiResponse = new ApiResponse(REGISTER_BAD, "");
-            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
-        }
+
+        userService.createUser(user);
+        apiResponse = new ApiResponse(REGISTER_CREATED, "");
+        return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+
     }
 
     @GetMapping("")
@@ -60,14 +54,10 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateUser(@PathVariable Long id, @RequestBody User user) {
 
-        try {
-            userService.updateUser(id, user);
-            apiResponse = new ApiResponse(REGISTER_UPDATED, "");
-            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
-        } catch (Exception e) {
-            apiResponse = new ApiResponse(REGISTER_DATA_ERROR, "");
-            return new ResponseEntity<>(apiResponse, HttpStatus.PAYMENT_REQUIRED);
-        }
+        userService.updateUser(id, user);
+        apiResponse = new ApiResponse(REGISTER_UPDATED, "");
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+
     }
 
 

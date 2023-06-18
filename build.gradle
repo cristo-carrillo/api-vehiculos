@@ -25,6 +25,8 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation 'io.jsonwebtoken:jjwt:0.2'
+	implementation "org.springdoc:springdoc-openapi-ui:1.6.11"
+	implementation "org.springdoc:springdoc-openapi-webflux-ui:1.6.11"
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
