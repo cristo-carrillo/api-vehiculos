@@ -6,7 +6,6 @@ import com.vehiculos.services.CarServiceImp;
 import com.vehiculos.utils.ApiResponse;
 import com.vehiculos.utils.ValidateToken;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
